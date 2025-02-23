@@ -1,0 +1,2740 @@
+
+<html lang="pt">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Calendário de 2025</title>
+        <style>
+            @import url('https://paulosousadias.github.io/theme-changer-js/theme-changer-min.css');
+            @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap');
+
+            :root {
+                /* Define color palette */
+                
+                --text-color: #555; /* Default text color */
+                --text-color-light: #fff; /* Default text color */
+                --background-color: #f5f5f5; /* Background color */
+                --header-color: #063566; /* Header background color */
+                --border-color: #ddd; /* Border color */
+                --shadow-color: #0000001A; /* Box shadow color */
+                
+                --white: #fff; /* White color */
+                
+                --week-background: #f0f0f0; /** Light gray color */
+                --gray-dark: #333; /** Dark gray color */
+                
+                --day-background: #fafafa; /* Background color for each day */
+                --holiday-background: #ff8c19; /* Orange for holidays */
+                --carnival-border: #ffa500; /* Orange for Carnaval */
+
+                --sunday-background: #d0e8ff; /* Light blue for Sundays */
+                --saturday-background: #e0e0e0; /* Darker gray for Saturdays */
+
+                --season-spring-background: #A8E6CF; /* Spring season color */
+                --season-spring-text: #004d00; /* Dark Green for text */
+                --season-summer-background: #FFD3B6; /* Summer season color */
+                --season-summer-text: #994d00; /* Brown for text */
+                --season-autumn-background: #FFAB91; /* Autumn season color */
+                --season-autumn-text: #4d2600; /* Dark Brown for text */
+                --season-winter-background: #80DEEA; /* Winter season color */
+                --season-winter-text: #00264d; /* Dark Blue for text */
+                
+                --moon-phase-color: #888; /* Moon phase color */
+
+                --dst-color: #000; /* Black for DST text */
+                --dst-background: #B39DDB; /* Purple for DST background */
+                --dst-border: #7E57C2; /* Slightly darker purple border */
+
+                /*theme-changer vars*/
+                --tc-foreground-color: var(--text-color);
+                --tc-background-color: var(--background-color);
+                --tc-on-background-color: var(--border-color);
+            }
+
+            :root.dark {
+                /* Define color palette */
+
+                --text-color: #ccc; /* Default text color */
+                --text-color-light: #eee; /* Default text color */
+                --background-color: #353535; /* Background color */
+                --header-color: #ddd; /* Header background color */
+                --border-color: #333; /* Border color */
+                --shadow-color: #FFFFFF5A; /* Box shadow color */
+
+                --white: #999; /* White color */
+
+                --week-background: #505050; /** Light gray color */
+                --gray-dark: #aaa; /** Dark gray color */
+
+                --day-background: #6a6a6a; /* Background color for each day */
+                --holiday-background: #ff7043; /* Orange for holidays */
+                --carnival-border: #ffab40; /* Orange for Carnaval */
+
+                --sunday-background: #5381ad; /* Light blue for Sundays */
+                --saturday-background: #a0a0a0; /* Darker gray for Saturdays */
+                --sunday-background: #37474f; /* Dark blue for Sundays */
+                --saturday-background: #455a64; /* Darker gray for Saturdays */
+
+                --dst-color: #fff; /* White for DST text */
+                --dst-background: #7e57c2; /* Lighter purple for DST background */
+                --dst-border: #5e35b1; /* Darker purple border */
+            }
+
+            html {
+                /* 16px base font size for Arial */
+                /* 15px base font size for Poppins */
+                font-size: 15px;
+            }
+            body {
+                font-family: "Poppins", Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: var(--background-color);
+            }
+            .spacer {
+                height: 20px;
+            }
+            .calendar {
+                width: 90%;
+                margin: 0 auto;
+                background-color: var(--white);
+                border-radius: 8px;
+                box-shadow: 0 2px 10px var(--shadow-color);
+                padding: 20px;
+                /*aspect-ratio: 1 / 0.9;  /* 1.414 A4 aspect ratio */
+                display: flex;
+                flex-direction: column;
+            }
+            .header {
+                text-align: center;
+                font-size: 1.5rem; /*24px;*/
+                font-weight: bold;
+                margin-bottom: 20px;
+                color: var(--header-color);
+            }
+            .days-of-week {
+                width: 100%;
+                display: grid;
+                grid-template-columns: 30px repeat(7, 1fr); /* Add column for week numbers */
+                text-align: center;
+                font-weight: bold;
+                margin-bottom: 10px;
+                gap: 5px;
+            }
+            .days-of-week.prev-month {
+                opacity: 0.5;
+            }
+            .week-number.prev-month {
+                opacity: 0.5;
+            }
+            .calendar-grid {
+                width: 100%;
+                display: grid;
+                grid-template-columns: 30px repeat(7, 1fr); /* Add column for week numbers */
+                grid-auto-rows: 1fr; 
+                gap: 5px;
+                height: 100%;
+            }
+            .week-number {
+                text-align: center;
+                font-size: 0.75rem; /*12px;*/
+                background-color: var(--week-background);
+                font-weight: bold;
+                border-right: 1px solid var(--border-color);
+                border-radius: 5px;
+                padding: 5px;
+            }
+            .day.prev-month {
+                opacity: 0.4;
+            }
+            .day {
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
+                background-color: var(--day-background);
+                border-radius: 5px;
+                cursor: pointer;
+                position: relative;
+                aspect-ratio: 1 / 1;
+                font-size: 1.5rem; /*24px;*/
+                padding: 5px;
+            }
+            .day.sunday {
+                background-color: var(--sunday-background); /* Light blue for Sundays */
+            }
+            .day.saturday {
+                background-color: var(--saturday-background); /* Darker gray for Saturdays */
+            }
+            .day.holiday {
+                background-color: var(--holiday-background); /* Orange for holidays */
+                font-weight: bold;
+            }
+            .day.carnival {
+                font-weight: bold; 
+                border: 2px dashed var(--carnival-border); /* Orange border for Carnaval */
+            }
+            .dark .day.carnival {
+                border: 3px dashed var(--carnival-border); /* Orange border for Carnaval */
+            }
+            .day.observance {
+                /*background-color: #f8c8d0; /* Pink for observance days like Valentine's, Mother's, and Father's Day */
+                font-weight: bold;
+            }
+            .day.season {
+                /*background-color: #99cc99; /* Light Green for season starts */
+                /*font-weight: bold;*/
+            }
+            .holiday-description {
+                margin-top: 5px;
+                font-size: 0.75rem; /*12px;*/
+                text-align: center;
+                color: var(--text-color-light);
+            }
+            .holiday-description.carnival {
+                color: var(--text-color);
+            }
+            .observance-description {
+                margin-top: 5px;
+                font-size: 0.75rem; /*12px;*/
+                font-weight: normal;
+                text-align: center;
+                color: var(--text-color);
+            }
+            .season-description {
+                margin-top: 5px;
+                font-size: 0.75rem; /*12px;*/
+                font-weight: bold;
+                text-align: center;
+                color: var(--white);
+                background-color: #99cc99;
+                border-radius: 5px;
+                padding: 5px 20px;
+            }
+            .season-description.spring {
+                background-color: var(--season-spring-background); /* Light Green for Spring */
+                color: var(--season-spring-text); /* Dark Green for text */
+            }
+            .season-description.summer {
+                background-color: var(--season-summer-background); /* Light Orange/Peach for Summer */
+                color: var(--season-summer-text); /* Brown for text */
+            }
+            .season-description.autumn {
+                background-color: var(--season-autumn-background); /* Warm Orange/Red for Autumn */
+                color: var(--season-autumn-text); /* Dark Brown for text */
+            }
+            .season-description.winter {
+                background-color: var(--season-winter-background); /* Cool Blue for Winter */
+                color: var(--season-winter-text); /* Dark Blue for text */
+            }
+            .dst-description {
+                margin-top: 5px;
+                font-size: 0.625rem; /*10px;*/
+                font-weight: bold;
+                text-align: center;
+                color: var(--dst-color);
+                background-color: var(--dst-background); /* Purple for clock change */
+                border: 2px solid var(--dst-border); /* Slightly darker purple border */
+                border-radius: 5px;
+                padding: 2px 10px;
+            }
+            .dst-description.dst-start {
+            }
+            .dst-description.dst-end {
+            }
+            .moon-phase {
+                position: absolute;
+                top: 5px;
+                right: 5px;
+                font-size: 0.875rem; /*14px;*/
+                color: var(--moon-phase-color);  /* Gray color for moon phase icons */
+            }
+            .theme-toggle {
+                position: absolute;
+                top: 20px;
+                right: 25px;
+            }
+
+            /* Responsive Styles */
+            @media (max-width: 900px) {
+                .calendar {
+                    width: 95%;
+                    padding: 15px;
+                }
+                .header {
+                    font-size: 1.375rem; /*22px;*/
+                }
+                .days-of-week {
+                    grid-template-columns: 20px repeat(7, 1fr);
+                    font-size: 0.875rem; /*14px;*/
+                }
+                .calendar-grid {
+                    grid-template-columns: 20px repeat(7, 1fr);
+                }
+                .week-number {
+                    font-size: 0.625rem; /*10px;*/
+                    padding: 3px;
+                }
+                .day {
+                    font-size: 1.25rem; /*20px;*/
+                    padding: 8px;
+                    aspect-ratio: 1 / 1.1;
+                }
+                .moon-phase {
+                    font-size: 0.75rem; /*12px;*/
+                }
+                .holiday-description, .observance-description, .season-description {
+                    font-size: 0.625rem; /*10px;*/
+                }
+                .dst-description {
+                    font-size: 0.5rem; /*8px;*/
+                }
+                .season-description {
+                    padding: 5px 10px;
+                }
+                .season-description.spring {
+                    padding: 5px 5px;
+                }
+                .dst-description {
+                    padding: 5px 5px;
+                }
+            }
+
+            @media (max-width: 600px) {
+                .calendar {
+                    width: 95%;
+                    padding: 10px;
+                }
+                .header {
+                    font-size: 1.125rem; /*18px;*/
+                }
+                .days-of-week {
+                    grid-template-columns: 10px repeat(7, 1fr);
+                    font-size: 0.75rem; /*12px;*/
+                }
+                .calendar-grid {
+                    grid-template-columns: 10px repeat(7, 1fr);
+                }
+                .week-number {
+                    font-size: 0.5rem; /*8px;*/
+                    padding: 2px;
+                }
+                .day {
+                    font-size: 1.125rem; /*18px;*/
+                    padding: 5px;
+                    aspect-ratio: 1 / 1.2;
+                }
+                .moon-phase {
+                    font-size: 0.625rem; /*10px;*/
+                }
+                .holiday-description, .observance-description, .season-description {
+                    font-size: 0.5rem; /*8px;*/
+                }
+                .dst-description {
+                    font-size: 0.375rem; /*6px;*/
+                }
+                .season-description {
+                    padding: 5px 5px;
+                }
+                .season-description.spring {
+                    padding: 5px 3px;
+                }
+            }
+
+            @media (max-width: 500px) {
+                .day {
+                    font-size: 1.0625rem; /*17px;*/
+                    padding: 3px;
+                }
+                .moon-phase {
+                    top: 4px;
+                    right: 4px;
+                    font-size: 0.5rem; /*8px;*/
+                }
+                .holiday-description, .observance-description, .season-description {
+                    font-size: 0.375rem; /*6px;*/
+                }
+                .dst-description {
+                    font-size: 0.3125rem; /*5px;*/
+                }
+            }
+
+            @media (max-width: 400px) {
+                .calendar {
+                    width: 95%;
+                    padding: 8px;
+                }
+                .header {
+                    font-size: 1.125rem; /*18px;*/
+                }
+                .days-of-week {
+                    grid-template-columns: 8px repeat(7, 1fr);
+                    font-size: 0.625rem; /*10px;*/
+                }
+                .calendar-grid {
+                    grid-template-columns: 8px repeat(7, 1fr);
+                }
+                .week-number {
+                    font-size: 0.375rem; /*6px;*/
+                    padding: 1px;
+                }
+                .day {
+                    font-size: 1rem; /*16px;*/
+                    padding: 4px;
+                    aspect-ratio: 1 / 1.3;
+                }
+                .moon-phase {
+                    top: 3px;
+                    right: 3px;
+                    font-size: 0.4375rem; /*7px;*/
+                }
+                .holiday-description, .observance-description, .season-description {
+                    font-size: 0.3125rem; /*5px;*/
+                }
+                .dst-description {
+                    font-size: 0.25rem; /*4px;*/
+                }
+                .season-description {
+                    padding: 2px 3px;
+                }
+                .season-description.spring {
+                    padding: 2px 1px;
+                }
+            }
+
+            /* Larger Screens (larger than 1200px) */
+            @media (min-width: 1200px), print {
+                .calendar {
+                    width: 80%;
+                    padding: 30px;
+                }
+                .header {
+                    font-size: 1.875rem; /*30px;*/
+                }
+                .days-of-week {
+                    grid-template-columns: 40px repeat(7, 1fr);
+                    font-size: 1.125rem; /*18px;*/
+                }
+                .calendar-grid {
+                    grid-template-columns: 40px repeat(7, 1fr);
+                }
+                .week-number {
+                    font-size: 0.875rem; /*14px;*/
+                    padding: 8px;
+                }
+                .day {
+                    font-size: 1.75rem; /*28px;*/
+                    padding: 12px;
+                }
+                .moon-phase {
+                    font-size: 1rem; /*16px;*/
+                }
+                .holiday-description, .observance-description, .season-description {
+                    font-size: 0.875rem; /*14px;*/
+                }
+                .dst-description {
+                    font-size: 0.75rem; /*12px;*/
+                }
+            }
+
+            /* Very Large Screens (larger than 1400px) */
+            @media (min-width: 1400px) {
+                .calendar {
+                    width: 75%;
+                    padding: 40px;
+                }
+                .header {
+                    font-size: 2.25rem; /*36px;*/
+                }
+                .days-of-week {
+                    grid-template-columns: 50px repeat(7, 1fr);
+                    font-size: 1.375rem; /*22px;*/
+                }
+                .calendar-grid {
+                    grid-template-columns: 50px repeat(7, 1fr);
+                }
+                .week-number {
+                    font-size: 1.125rem; /*18px;*/
+                    padding: 12px;
+                }
+                .day {
+                    font-size: 2rem; /*32px;*/
+                    padding: 16px;
+                }
+                .moon-phase {
+                    font-size: 1.125rem; /*18px;*/
+                }
+                .holiday-description, .observance-description, .season-description {
+                    font-size: 1rem; /*16px;*/
+                }
+                .dst-description {
+                    font-size: 0.875rem; /*14px;*/
+                }
+            }
+
+            /* Print Styles */
+            @media print {
+                .theme-toggle {
+                    display: none;
+                }
+                @page {
+                    size: A4 landscape; /* Force landscape orientation */
+                    margin: 0;          /* Remove default margins */
+                }
+                body {
+                    margin: 0;
+                    padding: 0;
+                    width: 100vw; /* Ensure full viewport width */
+                    height: 100vh; /* Ensure full viewport height */
+                    overflow: hidden; /* Avoid scrollbars in print */
+                    background-color: white;
+                    color: black;
+                    -webkit-print-color-adjust: exact; /* For Chrome, Safari, Edge */
+                    print-color-adjust: exact;        /* For Firefox */
+                }
+                .spacer {
+                    display: none;
+                }
+                .calendar {
+                    width: 95%;
+                    height: 95%;
+                    box-shadow: none;
+                    padding: 20;
+                    align-items: center;
+                    box-shadow: none; /* Remove any shadows for print clarity */
+                    page-break-inside: avoid; /* Prevent splitting the calendar across pages */
+                    page-break-after: always; /* Force each month to start on a new page */
+                    display: block; /* Ensure block layout for print */
+                }
+                /* Prevent page breaks inside the calendar */
+                .calendar, {
+                    page-break-inside: avoid;
+                }
+                .calendar:last-child {
+                    page-break-after: auto; /* Prevent extra blank page after the last month */
+                }
+                .calendar:nth-child(odd) {
+                }
+                .days-of-week {
+                    width: 100%;
+                    align-items: center;
+                    gap: 5px;
+                    padding: 5px;
+                }
+                .calendar-grid {
+                    width: 100%;
+                    height: 85%;
+                }
+                .day {
+                    aspect-ratio: auto; /* Adjust dynamically */
+                }
+                .holiday-description, .observance-description, .season-description {
+                    font-size: 0.75rem; /*12px;*/
+                }
+                .dst-description {
+                    font-size: 0.625rem; /*10px;*/
+                }
+            }
+        </style>
+    </head>
+    <body>
+
+        <div class="theme-toggle"></div>
+        <script src="https://paulosousadias.github.io/theme-changer-js/theme-changer-min.js"></script>
+        <div class="spacer"></div>
+        <div class="calendar">
+            <div class="header">Janeiro 2025</div>
+            <div class="days-of-week">
+                <div>Sem</div>
+                <div>Dom</div>
+                <div>Seg</div>
+                <div>Ter</div>
+                <div>Qua</div>
+                <div>Qui</div>
+                <div>Sex</div>
+                <div>Sáb</div>
+            </div>
+            <div class="calendar-grid">
+                <div class="week-number">1</div>
+                <div class="day sunday prev-month">
+                    29
+                </div>
+                <div class="day prev-month">
+                    30
+                    <div class="moon-phase">🌑</div>
+                </div>
+                <div class="day observance prev-month">
+                    31
+                    <div class="observance-description">Véspera de Ano Novo</div>
+                </div>
+                <div class="day holiday">
+                    1
+                    <div class="holiday-description">Ano Novo</div>
+                </div>
+                <div class="day">
+                    2
+                </div>
+                <div class="day">
+                    3
+                </div>
+                <div class="day saturday">
+                    4
+                </div>
+                <div class="week-number">2</div>
+                <div class="day sunday">
+                    5
+                </div>
+                <div class="day">
+                    6
+                    <div class="moon-phase">🌓</div>
+                </div>
+                <div class="day">
+                    7
+                </div>
+                <div class="day">
+                    8
+                </div>
+                <div class="day">
+                    9
+                </div>
+                <div class="day">
+                    10
+                </div>
+                <div class="day saturday">
+                    11
+                </div>
+                <div class="week-number">3</div>
+                <div class="day sunday">
+                    12
+                </div>
+                <div class="day">
+                    13
+                    <div class="moon-phase">🌕</div>
+                </div>
+                <div class="day">
+                    14
+                </div>
+                <div class="day">
+                    15
+                </div>
+                <div class="day">
+                    16
+                </div>
+                <div class="day">
+                    17
+                </div>
+                <div class="day saturday">
+                    18
+                </div>
+                <div class="week-number">4</div>
+                <div class="day sunday">
+                    19
+                </div>
+                <div class="day">
+                    20
+                </div>
+                <div class="day">
+                    21
+                    <div class="moon-phase">🌗</div>
+                </div>
+                <div class="day">
+                    22
+                </div>
+                <div class="day">
+                    23
+                </div>
+                <div class="day">
+                    24
+                </div>
+                <div class="day saturday">
+                    25
+                </div>
+                <div class="week-number">5</div>
+                <div class="day sunday">
+                    26
+                </div>
+                <div class="day">
+                    27
+                </div>
+                <div class="day">
+                    28
+                </div>
+                <div class="day">
+                    29
+                    <div class="moon-phase">🌑</div>
+                </div>
+                <div class="day">
+                    30
+                </div>
+                <div class="day">
+                    31
+                </div>
+                <div class="day saturday prev-month">
+                    1
+                </div>
+                <div class="week-number prev-month">6</div>
+                <div class="day sunday prev-month">
+                    2
+                </div>
+                <div class="day prev-month">
+                    3
+                </div>
+                <div class="day prev-month">
+                    4
+                </div>
+                <div class="day prev-month">
+                    5
+                    <div class="moon-phase">🌓</div>
+                </div>
+                <div class="day prev-month">
+                    6
+                </div>
+                <div class="day prev-month">
+                    7
+                </div>
+                <div class="day saturday prev-month">
+                    8
+                </div>
+            </div>
+        </div>
+        <div class="spacer"></div>
+        <div class="calendar">
+            <div class="header">Fevereiro 2025</div>
+            <div class="days-of-week">
+                <div>Sem</div>
+                <div>Dom</div>
+                <div>Seg</div>
+                <div>Ter</div>
+                <div>Qua</div>
+                <div>Qui</div>
+                <div>Sex</div>
+                <div>Sáb</div>
+            </div>
+            <div class="calendar-grid">
+                <div class="week-number">5</div>
+                <div class="day sunday prev-month">
+                    26
+                </div>
+                <div class="day prev-month">
+                    27
+                </div>
+                <div class="day prev-month">
+                    28
+                </div>
+                <div class="day prev-month">
+                    29
+                    <div class="moon-phase">🌑</div>
+                </div>
+                <div class="day prev-month">
+                    30
+                </div>
+                <div class="day prev-month">
+                    31
+                </div>
+                <div class="day saturday">
+                    1
+                </div>
+                <div class="week-number">6</div>
+                <div class="day sunday">
+                    2
+                </div>
+                <div class="day">
+                    3
+                </div>
+                <div class="day">
+                    4
+                </div>
+                <div class="day">
+                    5
+                    <div class="moon-phase">🌓</div>
+                </div>
+                <div class="day">
+                    6
+                </div>
+                <div class="day">
+                    7
+                </div>
+                <div class="day saturday">
+                    8
+                </div>
+                <div class="week-number">7</div>
+                <div class="day sunday">
+                    9
+                </div>
+                <div class="day">
+                    10
+                </div>
+                <div class="day">
+                    11
+                </div>
+                <div class="day">
+                    12
+                    <div class="moon-phase">🌕</div>
+                </div>
+                <div class="day">
+                    13
+                </div>
+                <div class="day observance">
+                    14
+                    <div class="observance-description">Dia dos Namorados</div>
+                </div>
+                <div class="day saturday">
+                    15
+                </div>
+                <div class="week-number">8</div>
+                <div class="day sunday">
+                    16
+                </div>
+                <div class="day">
+                    17
+                </div>
+                <div class="day">
+                    18
+                </div>
+                <div class="day">
+                    19
+                </div>
+                <div class="day">
+                    20
+                    <div class="moon-phase">🌗</div>
+                </div>
+                <div class="day">
+                    21
+                </div>
+                <div class="day saturday">
+                    22
+                </div>
+                <div class="week-number">9</div>
+                <div class="day sunday">
+                    23
+                </div>
+                <div class="day">
+                    24
+                </div>
+                <div class="day">
+                    25
+                </div>
+                <div class="day">
+                    26
+                </div>
+                <div class="day">
+                    27
+                </div>
+                <div class="day">
+                    28
+                    <div class="moon-phase">🌑</div>
+                </div>
+                <div class="day saturday prev-month">
+                    1
+                </div>
+                <div class="week-number prev-month">10</div>
+                <div class="day sunday prev-month">
+                    2
+                </div>
+                <div class="day prev-month">
+                    3
+                </div>
+                <div class="day carnival prev-month">
+                    4
+                    <div class="holiday-description carnival">Carnaval</div>
+                </div>
+                <div class="day prev-month">
+                    5
+                </div>
+                <div class="day prev-month">
+                    6
+                    <div class="moon-phase">🌓</div>
+                </div>
+                <div class="day prev-month">
+                    7
+                </div>
+                <div class="day saturday prev-month">
+                    8
+                </div>
+            </div>
+        </div>
+        <div class="spacer"></div>
+        <div class="calendar">
+            <div class="header">Março 2025</div>
+            <div class="days-of-week">
+                <div>Sem</div>
+                <div>Dom</div>
+                <div>Seg</div>
+                <div>Ter</div>
+                <div>Qua</div>
+                <div>Qui</div>
+                <div>Sex</div>
+                <div>Sáb</div>
+            </div>
+            <div class="calendar-grid">
+                <div class="week-number">9</div>
+                <div class="day sunday prev-month">
+                    23
+                </div>
+                <div class="day prev-month">
+                    24
+                </div>
+                <div class="day prev-month">
+                    25
+                </div>
+                <div class="day prev-month">
+                    26
+                </div>
+                <div class="day prev-month">
+                    27
+                </div>
+                <div class="day prev-month">
+                    28
+                    <div class="moon-phase">🌑</div>
+                </div>
+                <div class="day saturday">
+                    1
+                </div>
+                <div class="week-number">10</div>
+                <div class="day sunday">
+                    2
+                </div>
+                <div class="day">
+                    3
+                </div>
+                <div class="day carnival">
+                    4
+                    <div class="holiday-description carnival">Carnaval</div>
+                </div>
+                <div class="day">
+                    5
+                </div>
+                <div class="day">
+                    6
+                    <div class="moon-phase">🌓</div>
+                </div>
+                <div class="day">
+                    7
+                </div>
+                <div class="day saturday">
+                    8
+                </div>
+                <div class="week-number">11</div>
+                <div class="day sunday">
+                    9
+                </div>
+                <div class="day">
+                    10
+                </div>
+                <div class="day">
+                    11
+                </div>
+                <div class="day">
+                    12
+                </div>
+                <div class="day">
+                    13
+                </div>
+                <div class="day">
+                    14
+                    <div class="moon-phase">🌕</div>
+                </div>
+                <div class="day saturday">
+                    15
+                </div>
+                <div class="week-number">12</div>
+                <div class="day sunday">
+                    16
+                </div>
+                <div class="day">
+                    17
+                </div>
+                <div class="day">
+                    18
+                </div>
+                <div class="day observance">
+                    19
+                    <div class="observance-description">Dia do Pai</div>
+                </div>
+                <div class="day season">
+                    20
+                    <div class="season-description spring">Primavera</div>
+                </div>
+                <div class="day">
+                    21
+                </div>
+                <div class="day saturday">
+                    22
+                    <div class="moon-phase">🌗</div>
+                </div>
+                <div class="week-number">13</div>
+                <div class="day sunday">
+                    23
+                </div>
+                <div class="day">
+                    24
+                </div>
+                <div class="day">
+                    25
+                </div>
+                <div class="day">
+                    26
+                </div>
+                <div class="day">
+                    27
+                </div>
+                <div class="day">
+                    28
+                </div>
+                <div class="day saturday">
+                    29
+                    <div class="moon-phase">🌑</div>
+                </div>
+                <div class="week-number">14</div>
+                <div class="day sunday">
+                    30
+                    <div class="dst-description dst-start">Hora Verão</div>
+                </div>
+                <div class="day">
+                    31
+                </div>
+                <div class="day prev-month">
+                    1
+                </div>
+                <div class="day prev-month">
+                    2
+                </div>
+                <div class="day prev-month">
+                    3
+                </div>
+                <div class="day prev-month">
+                    4
+                </div>
+                <div class="day saturday prev-month">
+                    5
+                    <div class="moon-phase">🌓</div>
+                </div>
+            </div>
+        </div>
+        <div class="spacer"></div>
+        <div class="calendar">
+            <div class="header">Abril 2025</div>
+            <div class="days-of-week">
+                <div>Sem</div>
+                <div>Dom</div>
+                <div>Seg</div>
+                <div>Ter</div>
+                <div>Qua</div>
+                <div>Qui</div>
+                <div>Sex</div>
+                <div>Sáb</div>
+            </div>
+            <div class="calendar-grid">
+                <div class="week-number">14</div>
+                <div class="day sunday prev-month">
+                    30
+                    <div class="dst-description dst-start">Hora Verão</div>
+                </div>
+                <div class="day prev-month">
+                    31
+                </div>
+                <div class="day">
+                    1
+                </div>
+                <div class="day">
+                    2
+                </div>
+                <div class="day">
+                    3
+                </div>
+                <div class="day">
+                    4
+                </div>
+                <div class="day saturday">
+                    5
+                    <div class="moon-phase">🌓</div>
+                </div>
+                <div class="week-number">15</div>
+                <div class="day sunday">
+                    6
+                </div>
+                <div class="day">
+                    7
+                </div>
+                <div class="day">
+                    8
+                </div>
+                <div class="day">
+                    9
+                </div>
+                <div class="day">
+                    10
+                </div>
+                <div class="day">
+                    11
+                </div>
+                <div class="day saturday">
+                    12
+                </div>
+                <div class="week-number">16</div>
+                <div class="day sunday">
+                    13
+                    <div class="moon-phase">🌕</div>
+                </div>
+                <div class="day">
+                    14
+                </div>
+                <div class="day">
+                    15
+                </div>
+                <div class="day">
+                    16
+                </div>
+                <div class="day">
+                    17
+                </div>
+                <div class="day holiday">
+                    18
+                    <div class="holiday-description">Sexta-Feira Santa</div>
+                </div>
+                <div class="day saturday">
+                    19
+                </div>
+                <div class="week-number">17</div>
+                <div class="day sunday holiday">
+                    20
+                    <div class="holiday-description">Páscoa</div>
+                </div>
+                <div class="day">
+                    21
+                    <div class="moon-phase">🌗</div>
+                </div>
+                <div class="day">
+                    22
+                </div>
+                <div class="day">
+                    23
+                </div>
+                <div class="day">
+                    24
+                </div>
+                <div class="day holiday">
+                    25
+                    <div class="holiday-description">Dia da Liberdade</div>
+                </div>
+                <div class="day saturday">
+                    26
+                </div>
+                <div class="week-number">18</div>
+                <div class="day sunday">
+                    27
+                    <div class="moon-phase">🌑</div>
+                </div>
+                <div class="day">
+                    28
+                </div>
+                <div class="day">
+                    29
+                </div>
+                <div class="day">
+                    30
+                </div>
+                <div class="day holiday prev-month">
+                    1
+                    <div class="holiday-description">Dia do Trabalhador</div>
+                </div>
+                <div class="day prev-month">
+                    2
+                </div>
+                <div class="day saturday prev-month">
+                    3
+                </div>
+                <div class="week-number prev-month">19</div>
+                <div class="day sunday observance prev-month">
+                    4
+                    <div class="moon-phase">🌓</div>
+                    <div class="observance-description">Dia da Mãe</div>
+                </div>
+                <div class="day prev-month">
+                    5
+                </div>
+                <div class="day prev-month">
+                    6
+                </div>
+                <div class="day prev-month">
+                    7
+                </div>
+                <div class="day prev-month">
+                    8
+                </div>
+                <div class="day prev-month">
+                    9
+                </div>
+                <div class="day saturday prev-month">
+                    10
+                </div>
+            </div>
+        </div>
+        <div class="spacer"></div>
+        <div class="calendar">
+            <div class="header">Maio 2025</div>
+            <div class="days-of-week">
+                <div>Sem</div>
+                <div>Dom</div>
+                <div>Seg</div>
+                <div>Ter</div>
+                <div>Qua</div>
+                <div>Qui</div>
+                <div>Sex</div>
+                <div>Sáb</div>
+            </div>
+            <div class="calendar-grid">
+                <div class="week-number">18</div>
+                <div class="day sunday prev-month">
+                    27
+                    <div class="moon-phase">🌑</div>
+                </div>
+                <div class="day prev-month">
+                    28
+                </div>
+                <div class="day prev-month">
+                    29
+                </div>
+                <div class="day prev-month">
+                    30
+                </div>
+                <div class="day holiday">
+                    1
+                    <div class="holiday-description">Dia do Trabalhador</div>
+                </div>
+                <div class="day">
+                    2
+                </div>
+                <div class="day saturday">
+                    3
+                </div>
+                <div class="week-number">19</div>
+                <div class="day sunday observance">
+                    4
+                    <div class="moon-phase">🌓</div>
+                    <div class="observance-description">Dia da Mãe</div>
+                </div>
+                <div class="day">
+                    5
+                </div>
+                <div class="day">
+                    6
+                </div>
+                <div class="day">
+                    7
+                </div>
+                <div class="day">
+                    8
+                </div>
+                <div class="day">
+                    9
+                </div>
+                <div class="day saturday">
+                    10
+                </div>
+                <div class="week-number">20</div>
+                <div class="day sunday">
+                    11
+                </div>
+                <div class="day">
+                    12
+                    <div class="moon-phase">🌕</div>
+                </div>
+                <div class="day">
+                    13
+                </div>
+                <div class="day">
+                    14
+                </div>
+                <div class="day">
+                    15
+                </div>
+                <div class="day">
+                    16
+                </div>
+                <div class="day saturday">
+                    17
+                </div>
+                <div class="week-number">21</div>
+                <div class="day sunday">
+                    18
+                </div>
+                <div class="day">
+                    19
+                </div>
+                <div class="day">
+                    20
+                    <div class="moon-phase">🌗</div>
+                </div>
+                <div class="day">
+                    21
+                </div>
+                <div class="day">
+                    22
+                </div>
+                <div class="day">
+                    23
+                </div>
+                <div class="day saturday">
+                    24
+                </div>
+                <div class="week-number">22</div>
+                <div class="day sunday">
+                    25
+                </div>
+                <div class="day">
+                    26
+                </div>
+                <div class="day">
+                    27
+                    <div class="moon-phase">🌑</div>
+                </div>
+                <div class="day">
+                    28
+                </div>
+                <div class="day">
+                    29
+                </div>
+                <div class="day">
+                    30
+                </div>
+                <div class="day saturday">
+                    31
+                </div>
+                <div class="week-number prev-month">23</div>
+                <div class="day sunday prev-month">
+                    1
+                </div>
+                <div class="day prev-month">
+                    2
+                </div>
+                <div class="day prev-month">
+                    3
+                    <div class="moon-phase">🌓</div>
+                </div>
+                <div class="day prev-month">
+                    4
+                </div>
+                <div class="day prev-month">
+                    5
+                </div>
+                <div class="day prev-month">
+                    6
+                </div>
+                <div class="day saturday prev-month">
+                    7
+                </div>
+            </div>
+        </div>
+        <div class="spacer"></div>
+        <div class="calendar">
+            <div class="header">Junho 2025</div>
+            <div class="days-of-week">
+                <div>Sem</div>
+                <div>Dom</div>
+                <div>Seg</div>
+                <div>Ter</div>
+                <div>Qua</div>
+                <div>Qui</div>
+                <div>Sex</div>
+                <div>Sáb</div>
+            </div>
+            <div class="calendar-grid">
+                <div class="week-number">23</div>
+                <div class="day sunday">
+                    1
+                </div>
+                <div class="day">
+                    2
+                </div>
+                <div class="day">
+                    3
+                    <div class="moon-phase">🌓</div>
+                </div>
+                <div class="day">
+                    4
+                </div>
+                <div class="day">
+                    5
+                </div>
+                <div class="day">
+                    6
+                </div>
+                <div class="day saturday">
+                    7
+                </div>
+                <div class="week-number">24</div>
+                <div class="day sunday">
+                    8
+                </div>
+                <div class="day">
+                    9
+                </div>
+                <div class="day holiday">
+                    10
+                    <div class="holiday-description">Dia de Portugal</div>
+                </div>
+                <div class="day">
+                    11
+                    <div class="moon-phase">🌕</div>
+                </div>
+                <div class="day">
+                    12
+                </div>
+                <div class="day">
+                    13
+                </div>
+                <div class="day saturday">
+                    14
+                </div>
+                <div class="week-number">25</div>
+                <div class="day sunday">
+                    15
+                </div>
+                <div class="day">
+                    16
+                </div>
+                <div class="day">
+                    17
+                </div>
+                <div class="day">
+                    18
+                    <div class="moon-phase">🌗</div>
+                </div>
+                <div class="day holiday">
+                    19
+                    <div class="holiday-description">Corpo de Deus</div>
+                </div>
+                <div class="day">
+                    20
+                </div>
+                <div class="day saturday season">
+                    21
+                    <div class="season-description summer">Verão</div>
+                </div>
+                <div class="week-number">26</div>
+                <div class="day sunday">
+                    22
+                </div>
+                <div class="day">
+                    23
+                </div>
+                <div class="day holiday">
+                    24
+                    <div class="holiday-description">Dia de São João</div>
+                </div>
+                <div class="day">
+                    25
+                    <div class="moon-phase">🌑</div>
+                </div>
+                <div class="day">
+                    26
+                </div>
+                <div class="day">
+                    27
+                </div>
+                <div class="day saturday">
+                    28
+                </div>
+                <div class="week-number">27</div>
+                <div class="day sunday">
+                    29
+                </div>
+                <div class="day">
+                    30
+                </div>
+                <div class="day prev-month">
+                    1
+                </div>
+                <div class="day prev-month">
+                    2
+                    <div class="moon-phase">🌓</div>
+                </div>
+                <div class="day prev-month">
+                    3
+                </div>
+                <div class="day prev-month">
+                    4
+                </div>
+                <div class="day saturday prev-month">
+                    5
+                </div>
+                <div class="week-number prev-month">28</div>
+                <div class="day sunday prev-month">
+                    6
+                </div>
+                <div class="day prev-month">
+                    7
+                </div>
+                <div class="day prev-month">
+                    8
+                </div>
+                <div class="day prev-month">
+                    9
+                </div>
+                <div class="day prev-month">
+                    10
+                    <div class="moon-phase">🌕</div>
+                </div>
+                <div class="day prev-month">
+                    11
+                </div>
+                <div class="day saturday prev-month">
+                    12
+                </div>
+            </div>
+        </div>
+        <div class="spacer"></div>
+        <div class="calendar">
+            <div class="header">Julho 2025</div>
+            <div class="days-of-week">
+                <div>Sem</div>
+                <div>Dom</div>
+                <div>Seg</div>
+                <div>Ter</div>
+                <div>Qua</div>
+                <div>Qui</div>
+                <div>Sex</div>
+                <div>Sáb</div>
+            </div>
+            <div class="calendar-grid">
+                <div class="week-number">27</div>
+                <div class="day sunday prev-month">
+                    29
+                </div>
+                <div class="day prev-month">
+                    30
+                </div>
+                <div class="day">
+                    1
+                </div>
+                <div class="day">
+                    2
+                    <div class="moon-phase">🌓</div>
+                </div>
+                <div class="day">
+                    3
+                </div>
+                <div class="day">
+                    4
+                </div>
+                <div class="day saturday">
+                    5
+                </div>
+                <div class="week-number">28</div>
+                <div class="day sunday">
+                    6
+                </div>
+                <div class="day">
+                    7
+                </div>
+                <div class="day">
+                    8
+                </div>
+                <div class="day">
+                    9
+                </div>
+                <div class="day">
+                    10
+                    <div class="moon-phase">🌕</div>
+                </div>
+                <div class="day">
+                    11
+                </div>
+                <div class="day saturday">
+                    12
+                </div>
+                <div class="week-number">29</div>
+                <div class="day sunday">
+                    13
+                </div>
+                <div class="day">
+                    14
+                </div>
+                <div class="day">
+                    15
+                </div>
+                <div class="day">
+                    16
+                </div>
+                <div class="day">
+                    17
+                </div>
+                <div class="day">
+                    18
+                    <div class="moon-phase">🌗</div>
+                </div>
+                <div class="day saturday">
+                    19
+                </div>
+                <div class="week-number">30</div>
+                <div class="day sunday">
+                    20
+                </div>
+                <div class="day">
+                    21
+                </div>
+                <div class="day">
+                    22
+                </div>
+                <div class="day">
+                    23
+                </div>
+                <div class="day">
+                    24
+                    <div class="moon-phase">🌑</div>
+                </div>
+                <div class="day">
+                    25
+                </div>
+                <div class="day saturday">
+                    26
+                </div>
+                <div class="week-number">31</div>
+                <div class="day sunday">
+                    27
+                </div>
+                <div class="day">
+                    28
+                </div>
+                <div class="day">
+                    29
+                </div>
+                <div class="day">
+                    30
+                </div>
+                <div class="day">
+                    31
+                </div>
+                <div class="day prev-month">
+                    1
+                    <div class="moon-phase">🌓</div>
+                </div>
+                <div class="day saturday prev-month">
+                    2
+                </div>
+                <div class="week-number prev-month">32</div>
+                <div class="day sunday prev-month">
+                    3
+                </div>
+                <div class="day prev-month">
+                    4
+                </div>
+                <div class="day prev-month">
+                    5
+                </div>
+                <div class="day prev-month">
+                    6
+                </div>
+                <div class="day prev-month">
+                    7
+                </div>
+                <div class="day prev-month">
+                    8
+                </div>
+                <div class="day saturday prev-month">
+                    9
+                    <div class="moon-phase">🌕</div>
+                </div>
+            </div>
+        </div>
+        <div class="spacer"></div>
+        <div class="calendar">
+            <div class="header">Agosto 2025</div>
+            <div class="days-of-week">
+                <div>Sem</div>
+                <div>Dom</div>
+                <div>Seg</div>
+                <div>Ter</div>
+                <div>Qua</div>
+                <div>Qui</div>
+                <div>Sex</div>
+                <div>Sáb</div>
+            </div>
+            <div class="calendar-grid">
+                <div class="week-number">31</div>
+                <div class="day sunday prev-month">
+                    27
+                </div>
+                <div class="day prev-month">
+                    28
+                </div>
+                <div class="day prev-month">
+                    29
+                </div>
+                <div class="day prev-month">
+                    30
+                </div>
+                <div class="day prev-month">
+                    31
+                </div>
+                <div class="day">
+                    1
+                    <div class="moon-phase">🌓</div>
+                </div>
+                <div class="day saturday">
+                    2
+                </div>
+                <div class="week-number">32</div>
+                <div class="day sunday">
+                    3
+                </div>
+                <div class="day">
+                    4
+                </div>
+                <div class="day">
+                    5
+                </div>
+                <div class="day">
+                    6
+                </div>
+                <div class="day">
+                    7
+                </div>
+                <div class="day">
+                    8
+                </div>
+                <div class="day saturday">
+                    9
+                    <div class="moon-phase">🌕</div>
+                </div>
+                <div class="week-number">33</div>
+                <div class="day sunday">
+                    10
+                </div>
+                <div class="day">
+                    11
+                </div>
+                <div class="day">
+                    12
+                </div>
+                <div class="day">
+                    13
+                </div>
+                <div class="day">
+                    14
+                </div>
+                <div class="day holiday">
+                    15
+                    <div class="holiday-description">Assunção de Maria</div>
+                </div>
+                <div class="day saturday">
+                    16
+                    <div class="moon-phase">🌗</div>
+                </div>
+                <div class="week-number">34</div>
+                <div class="day sunday">
+                    17
+                </div>
+                <div class="day">
+                    18
+                </div>
+                <div class="day">
+                    19
+                </div>
+                <div class="day">
+                    20
+                </div>
+                <div class="day">
+                    21
+                </div>
+                <div class="day">
+                    22
+                </div>
+                <div class="day saturday">
+                    23
+                    <div class="moon-phase">🌑</div>
+                </div>
+                <div class="week-number">35</div>
+                <div class="day sunday">
+                    24
+                </div>
+                <div class="day">
+                    25
+                </div>
+                <div class="day">
+                    26
+                </div>
+                <div class="day">
+                    27
+                </div>
+                <div class="day">
+                    28
+                </div>
+                <div class="day">
+                    29
+                </div>
+                <div class="day saturday">
+                    30
+                </div>
+                <div class="week-number">36</div>
+                <div class="day sunday">
+                    31
+                    <div class="moon-phase">🌓</div>
+                </div>
+                <div class="day prev-month">
+                    1
+                </div>
+                <div class="day prev-month">
+                    2
+                </div>
+                <div class="day prev-month">
+                    3
+                </div>
+                <div class="day prev-month">
+                    4
+                </div>
+                <div class="day prev-month">
+                    5
+                </div>
+                <div class="day saturday prev-month">
+                    6
+                </div>
+            </div>
+        </div>
+        <div class="spacer"></div>
+        <div class="calendar">
+            <div class="header">Setembro 2025</div>
+            <div class="days-of-week">
+                <div>Sem</div>
+                <div>Dom</div>
+                <div>Seg</div>
+                <div>Ter</div>
+                <div>Qua</div>
+                <div>Qui</div>
+                <div>Sex</div>
+                <div>Sáb</div>
+            </div>
+            <div class="calendar-grid">
+                <div class="week-number">36</div>
+                <div class="day sunday prev-month">
+                    31
+                    <div class="moon-phase">🌓</div>
+                </div>
+                <div class="day">
+                    1
+                </div>
+                <div class="day">
+                    2
+                </div>
+                <div class="day">
+                    3
+                </div>
+                <div class="day">
+                    4
+                </div>
+                <div class="day">
+                    5
+                </div>
+                <div class="day saturday">
+                    6
+                </div>
+                <div class="week-number">37</div>
+                <div class="day sunday">
+                    7
+                    <div class="moon-phase">🌕</div>
+                </div>
+                <div class="day">
+                    8
+                </div>
+                <div class="day">
+                    9
+                </div>
+                <div class="day">
+                    10
+                </div>
+                <div class="day">
+                    11
+                </div>
+                <div class="day">
+                    12
+                </div>
+                <div class="day saturday">
+                    13
+                </div>
+                <div class="week-number">38</div>
+                <div class="day sunday">
+                    14
+                    <div class="moon-phase">🌗</div>
+                </div>
+                <div class="day">
+                    15
+                </div>
+                <div class="day">
+                    16
+                </div>
+                <div class="day">
+                    17
+                </div>
+                <div class="day">
+                    18
+                </div>
+                <div class="day">
+                    19
+                </div>
+                <div class="day saturday">
+                    20
+                </div>
+                <div class="week-number">39</div>
+                <div class="day sunday">
+                    21
+                    <div class="moon-phase">🌑</div>
+                </div>
+                <div class="day">
+                    22
+                </div>
+                <div class="day season">
+                    23
+                    <div class="season-description autumn">Outono</div>
+                </div>
+                <div class="day">
+                    24
+                </div>
+                <div class="day">
+                    25
+                </div>
+                <div class="day">
+                    26
+                </div>
+                <div class="day saturday">
+                    27
+                </div>
+                <div class="week-number">40</div>
+                <div class="day sunday">
+                    28
+                </div>
+                <div class="day">
+                    29
+                    <div class="moon-phase">🌓</div>
+                </div>
+                <div class="day">
+                    30
+                </div>
+                <div class="day prev-month">
+                    1
+                </div>
+                <div class="day prev-month">
+                    2
+                </div>
+                <div class="day prev-month">
+                    3
+                </div>
+                <div class="day saturday prev-month">
+                    4
+                </div>
+                <div class="week-number prev-month">41</div>
+                <div class="day sunday holiday prev-month">
+                    5
+                    <div class="holiday-description">Implantação da República</div>
+                </div>
+                <div class="day prev-month">
+                    6
+                </div>
+                <div class="day prev-month">
+                    7
+                    <div class="moon-phase">🌕</div>
+                </div>
+                <div class="day prev-month">
+                    8
+                </div>
+                <div class="day prev-month">
+                    9
+                </div>
+                <div class="day prev-month">
+                    10
+                </div>
+                <div class="day saturday prev-month">
+                    11
+                </div>
+            </div>
+        </div>
+        <div class="spacer"></div>
+        <div class="calendar">
+            <div class="header">Outubro 2025</div>
+            <div class="days-of-week">
+                <div>Sem</div>
+                <div>Dom</div>
+                <div>Seg</div>
+                <div>Ter</div>
+                <div>Qua</div>
+                <div>Qui</div>
+                <div>Sex</div>
+                <div>Sáb</div>
+            </div>
+            <div class="calendar-grid">
+                <div class="week-number">40</div>
+                <div class="day sunday prev-month">
+                    28
+                </div>
+                <div class="day prev-month">
+                    29
+                    <div class="moon-phase">🌓</div>
+                </div>
+                <div class="day prev-month">
+                    30
+                </div>
+                <div class="day">
+                    1
+                </div>
+                <div class="day">
+                    2
+                </div>
+                <div class="day">
+                    3
+                </div>
+                <div class="day saturday">
+                    4
+                </div>
+                <div class="week-number">41</div>
+                <div class="day sunday holiday">
+                    5
+                    <div class="holiday-description">Implantação da República</div>
+                </div>
+                <div class="day">
+                    6
+                </div>
+                <div class="day">
+                    7
+                    <div class="moon-phase">🌕</div>
+                </div>
+                <div class="day">
+                    8
+                </div>
+                <div class="day">
+                    9
+                </div>
+                <div class="day">
+                    10
+                </div>
+                <div class="day saturday">
+                    11
+                </div>
+                <div class="week-number">42</div>
+                <div class="day sunday">
+                    12
+                </div>
+                <div class="day">
+                    13
+                    <div class="moon-phase">🌗</div>
+                </div>
+                <div class="day">
+                    14
+                </div>
+                <div class="day">
+                    15
+                </div>
+                <div class="day">
+                    16
+                </div>
+                <div class="day">
+                    17
+                </div>
+                <div class="day saturday">
+                    18
+                </div>
+                <div class="week-number">43</div>
+                <div class="day sunday">
+                    19
+                </div>
+                <div class="day">
+                    20
+                </div>
+                <div class="day">
+                    21
+                    <div class="moon-phase">🌑</div>
+                </div>
+                <div class="day">
+                    22
+                </div>
+                <div class="day">
+                    23
+                </div>
+                <div class="day">
+                    24
+                </div>
+                <div class="day saturday">
+                    25
+                </div>
+                <div class="week-number">44</div>
+                <div class="day sunday">
+                    26
+                    <div class="dst-description dst-end">Hora Inverno</div>
+                </div>
+                <div class="day">
+                    27
+                </div>
+                <div class="day">
+                    28
+                </div>
+                <div class="day">
+                    29
+                    <div class="moon-phase">🌓</div>
+                </div>
+                <div class="day">
+                    30
+                </div>
+                <div class="day">
+                    31
+                </div>
+                <div class="day saturday holiday prev-month">
+                    1
+                    <div class="holiday-description">Dia de Todos os Santos</div>
+                </div>
+                <div class="week-number prev-month">45</div>
+                <div class="day sunday prev-month">
+                    2
+                </div>
+                <div class="day prev-month">
+                    3
+                </div>
+                <div class="day prev-month">
+                    4
+                </div>
+                <div class="day prev-month">
+                    5
+                    <div class="moon-phase">🌕</div>
+                </div>
+                <div class="day prev-month">
+                    6
+                </div>
+                <div class="day prev-month">
+                    7
+                </div>
+                <div class="day saturday prev-month">
+                    8
+                </div>
+            </div>
+        </div>
+        <div class="spacer"></div>
+        <div class="calendar">
+            <div class="header">Novembro 2025</div>
+            <div class="days-of-week">
+                <div>Sem</div>
+                <div>Dom</div>
+                <div>Seg</div>
+                <div>Ter</div>
+                <div>Qua</div>
+                <div>Qui</div>
+                <div>Sex</div>
+                <div>Sáb</div>
+            </div>
+            <div class="calendar-grid">
+                <div class="week-number">44</div>
+                <div class="day sunday prev-month">
+                    26
+                    <div class="dst-description dst-end">Hora Inverno</div>
+                </div>
+                <div class="day prev-month">
+                    27
+                </div>
+                <div class="day prev-month">
+                    28
+                </div>
+                <div class="day prev-month">
+                    29
+                    <div class="moon-phase">🌓</div>
+                </div>
+                <div class="day prev-month">
+                    30
+                </div>
+                <div class="day prev-month">
+                    31
+                </div>
+                <div class="day saturday holiday">
+                    1
+                    <div class="holiday-description">Dia de Todos os Santos</div>
+                </div>
+                <div class="week-number">45</div>
+                <div class="day sunday">
+                    2
+                </div>
+                <div class="day">
+                    3
+                </div>
+                <div class="day">
+                    4
+                </div>
+                <div class="day">
+                    5
+                    <div class="moon-phase">🌕</div>
+                </div>
+                <div class="day">
+                    6
+                </div>
+                <div class="day">
+                    7
+                </div>
+                <div class="day saturday">
+                    8
+                </div>
+                <div class="week-number">46</div>
+                <div class="day sunday">
+                    9
+                </div>
+                <div class="day">
+                    10
+                </div>
+                <div class="day">
+                    11
+                </div>
+                <div class="day">
+                    12
+                    <div class="moon-phase">🌗</div>
+                </div>
+                <div class="day">
+                    13
+                </div>
+                <div class="day">
+                    14
+                </div>
+                <div class="day saturday">
+                    15
+                </div>
+                <div class="week-number">47</div>
+                <div class="day sunday">
+                    16
+                </div>
+                <div class="day">
+                    17
+                </div>
+                <div class="day">
+                    18
+                </div>
+                <div class="day">
+                    19
+                </div>
+                <div class="day">
+                    20
+                    <div class="moon-phase">🌑</div>
+                </div>
+                <div class="day">
+                    21
+                </div>
+                <div class="day saturday">
+                    22
+                </div>
+                <div class="week-number">48</div>
+                <div class="day sunday">
+                    23
+                </div>
+                <div class="day">
+                    24
+                </div>
+                <div class="day">
+                    25
+                </div>
+                <div class="day">
+                    26
+                </div>
+                <div class="day">
+                    27
+                </div>
+                <div class="day">
+                    28
+                    <div class="moon-phase">🌓</div>
+                </div>
+                <div class="day saturday">
+                    29
+                </div>
+                <div class="week-number">49</div>
+                <div class="day sunday">
+                    30
+                </div>
+                <div class="day holiday prev-month">
+                    1
+                    <div class="holiday-description">Restauração da Independência</div>
+                </div>
+                <div class="day prev-month">
+                    2
+                </div>
+                <div class="day prev-month">
+                    3
+                </div>
+                <div class="day prev-month">
+                    4
+                    <div class="moon-phase">🌕</div>
+                </div>
+                <div class="day prev-month">
+                    5
+                </div>
+                <div class="day saturday prev-month">
+                    6
+                </div>
+            </div>
+        </div>
+        <div class="spacer"></div>
+        <div class="calendar">
+            <div class="header">Dezembro 2025</div>
+            <div class="days-of-week">
+                <div>Sem</div>
+                <div>Dom</div>
+                <div>Seg</div>
+                <div>Ter</div>
+                <div>Qua</div>
+                <div>Qui</div>
+                <div>Sex</div>
+                <div>Sáb</div>
+            </div>
+            <div class="calendar-grid">
+                <div class="week-number">49</div>
+                <div class="day sunday prev-month">
+                    30
+                </div>
+                <div class="day holiday">
+                    1
+                    <div class="holiday-description">Restauração da Independência</div>
+                </div>
+                <div class="day">
+                    2
+                </div>
+                <div class="day">
+                    3
+                </div>
+                <div class="day">
+                    4
+                    <div class="moon-phase">🌕</div>
+                </div>
+                <div class="day">
+                    5
+                </div>
+                <div class="day saturday">
+                    6
+                </div>
+                <div class="week-number">50</div>
+                <div class="day sunday">
+                    7
+                </div>
+                <div class="day holiday">
+                    8
+                    <div class="holiday-description">Imaculada Conceição</div>
+                </div>
+                <div class="day">
+                    9
+                </div>
+                <div class="day">
+                    10
+                </div>
+                <div class="day">
+                    11
+                    <div class="moon-phase">🌗</div>
+                </div>
+                <div class="day">
+                    12
+                </div>
+                <div class="day saturday">
+                    13
+                </div>
+                <div class="week-number">51</div>
+                <div class="day sunday">
+                    14
+                </div>
+                <div class="day">
+                    15
+                </div>
+                <div class="day">
+                    16
+                </div>
+                <div class="day">
+                    17
+                </div>
+                <div class="day">
+                    18
+                </div>
+                <div class="day">
+                    19
+                </div>
+                <div class="day saturday">
+                    20
+                    <div class="moon-phase">🌑</div>
+                </div>
+                <div class="week-number">52</div>
+                <div class="day sunday season">
+                    21
+                    <div class="season-description winter">Inverno</div>
+                </div>
+                <div class="day">
+                    22
+                </div>
+                <div class="day">
+                    23
+                </div>
+                <div class="day observance">
+                    24
+                    <div class="observance-description">Véspera de Natal</div>
+                </div>
+                <div class="day holiday">
+                    25
+                    <div class="holiday-description">Natal</div>
+                </div>
+                <div class="day">
+                    26
+                </div>
+                <div class="day saturday">
+                    27
+                    <div class="moon-phase">🌓</div>
+                </div>
+                <div class="week-number">1</div>
+                <div class="day sunday">
+                    28
+                </div>
+                <div class="day">
+                    29
+                </div>
+                <div class="day">
+                    30
+                </div>
+                <div class="day observance">
+                    31
+                    <div class="observance-description">Véspera de Ano Novo</div>
+                </div>
+                <div class="day holiday prev-month">
+                    1
+                    <div class="holiday-description">Ano Novo</div>
+                </div>
+                <div class="day prev-month">
+                    2
+                </div>
+                <div class="day saturday prev-month">
+                    3
+                    <div class="moon-phase">🌕</div>
+                </div>
+                <div class="week-number prev-month">2</div>
+                <div class="day sunday prev-month">
+                    4
+                </div>
+                <div class="day prev-month">
+                    5
+                </div>
+                <div class="day prev-month">
+                    6
+                </div>
+                <div class="day prev-month">
+                    7
+                </div>
+                <div class="day prev-month">
+                    8
+                </div>
+                <div class="day prev-month">
+                    9
+                </div>
+                <div class="day saturday prev-month">
+                    10
+                    <div class="moon-phase">🌗</div>
+                </div>
+            </div>
+        </div>
+        <div class="spacer"></div>
+        <div class="calendar">
+            <div class="header">Janeiro 2026</div>
+            <div class="days-of-week">
+                <div>Sem</div>
+                <div>Dom</div>
+                <div>Seg</div>
+                <div>Ter</div>
+                <div>Qua</div>
+                <div>Qui</div>
+                <div>Sex</div>
+                <div>Sáb</div>
+            </div>
+            <div class="calendar-grid">
+                <div class="week-number">1</div>
+                <div class="day sunday prev-month">
+                    28
+                </div>
+                <div class="day prev-month">
+                    29
+                </div>
+                <div class="day prev-month">
+                    30
+                </div>
+                <div class="day observance prev-month">
+                    31
+                    <div class="observance-description">Véspera de Ano Novo</div>
+                </div>
+                <div class="day holiday">
+                    1
+                    <div class="holiday-description">Ano Novo</div>
+                </div>
+                <div class="day">
+                    2
+                </div>
+                <div class="day saturday">
+                    3
+                    <div class="moon-phase">🌕</div>
+                </div>
+                <div class="week-number">2</div>
+                <div class="day sunday">
+                    4
+                </div>
+                <div class="day">
+                    5
+                </div>
+                <div class="day">
+                    6
+                </div>
+                <div class="day">
+                    7
+                </div>
+                <div class="day">
+                    8
+                </div>
+                <div class="day">
+                    9
+                </div>
+                <div class="day saturday">
+                    10
+                    <div class="moon-phase">🌗</div>
+                </div>
+                <div class="week-number">3</div>
+                <div class="day sunday">
+                    11
+                </div>
+                <div class="day">
+                    12
+                </div>
+                <div class="day">
+                    13
+                </div>
+                <div class="day">
+                    14
+                </div>
+                <div class="day">
+                    15
+                </div>
+                <div class="day">
+                    16
+                </div>
+                <div class="day saturday">
+                    17
+                </div>
+                <div class="week-number">4</div>
+                <div class="day sunday">
+                    18
+                    <div class="moon-phase">🌑</div>
+                </div>
+                <div class="day">
+                    19
+                </div>
+                <div class="day">
+                    20
+                </div>
+                <div class="day">
+                    21
+                </div>
+                <div class="day">
+                    22
+                </div>
+                <div class="day">
+                    23
+                </div>
+                <div class="day saturday">
+                    24
+                </div>
+                <div class="week-number">5</div>
+                <div class="day sunday">
+                    25
+                </div>
+                <div class="day">
+                    26
+                    <div class="moon-phase">🌓</div>
+                </div>
+                <div class="day">
+                    27
+                </div>
+                <div class="day">
+                    28
+                </div>
+                <div class="day">
+                    29
+                </div>
+                <div class="day">
+                    30
+                </div>
+                <div class="day saturday">
+                    31
+                </div>
+                <div class="week-number prev-month">6</div>
+                <div class="day sunday prev-month">
+                    1
+                    <div class="moon-phase">🌕</div>
+                </div>
+                <div class="day prev-month">
+                    2
+                </div>
+                <div class="day prev-month">
+                    3
+                </div>
+                <div class="day prev-month">
+                    4
+                </div>
+                <div class="day prev-month">
+                    5
+                </div>
+                <div class="day prev-month">
+                    6
+                </div>
+                <div class="day saturday prev-month">
+                    7
+                </div>
+            </div>
+        </div>
+        <div class="spacer"></div>
+        <div class="calendar">
+            <div class="header">Fevereiro 2026</div>
+            <div class="days-of-week">
+                <div>Sem</div>
+                <div>Dom</div>
+                <div>Seg</div>
+                <div>Ter</div>
+                <div>Qua</div>
+                <div>Qui</div>
+                <div>Sex</div>
+                <div>Sáb</div>
+            </div>
+            <div class="calendar-grid">
+                <div class="week-number">6</div>
+                <div class="day sunday">
+                    1
+                    <div class="moon-phase">🌕</div>
+                </div>
+                <div class="day">
+                    2
+                </div>
+                <div class="day">
+                    3
+                </div>
+                <div class="day">
+                    4
+                </div>
+                <div class="day">
+                    5
+                </div>
+                <div class="day">
+                    6
+                </div>
+                <div class="day saturday">
+                    7
+                </div>
+                <div class="week-number">7</div>
+                <div class="day sunday">
+                    8
+                </div>
+                <div class="day">
+                    9
+                    <div class="moon-phase">🌗</div>
+                </div>
+                <div class="day">
+                    10
+                </div>
+                <div class="day">
+                    11
+                </div>
+                <div class="day">
+                    12
+                </div>
+                <div class="day">
+                    13
+                </div>
+                <div class="day saturday observance">
+                    14
+                    <div class="observance-description">Dia dos Namorados</div>
+                </div>
+                <div class="week-number">8</div>
+                <div class="day sunday">
+                    15
+                </div>
+                <div class="day">
+                    16
+                </div>
+                <div class="day carnival">
+                    17
+                    <div class="moon-phase">🌑</div>
+                    <div class="holiday-description carnival">Carnaval</div>
+                </div>
+                <div class="day">
+                    18
+                </div>
+                <div class="day">
+                    19
+                </div>
+                <div class="day">
+                    20
+                </div>
+                <div class="day saturday">
+                    21
+                </div>
+                <div class="week-number">9</div>
+                <div class="day sunday">
+                    22
+                </div>
+                <div class="day">
+                    23
+                </div>
+                <div class="day">
+                    24
+                    <div class="moon-phase">🌓</div>
+                </div>
+                <div class="day">
+                    25
+                </div>
+                <div class="day">
+                    26
+                </div>
+                <div class="day">
+                    27
+                </div>
+                <div class="day saturday">
+                    28
+                </div>
+                <div class="week-number prev-month">10</div>
+                <div class="day sunday prev-month">
+                    1
+                </div>
+                <div class="day prev-month">
+                    2
+                </div>
+                <div class="day prev-month">
+                    3
+                    <div class="moon-phase">🌕</div>
+                </div>
+                <div class="day prev-month">
+                    4
+                </div>
+                <div class="day prev-month">
+                    5
+                </div>
+                <div class="day prev-month">
+                    6
+                </div>
+                <div class="day saturday prev-month">
+                    7
+                </div>
+                <div class="week-number prev-month">11</div>
+                <div class="day sunday prev-month">
+                    8
+                </div>
+                <div class="day prev-month">
+                    9
+                </div>
+                <div class="day prev-month">
+                    10
+                </div>
+                <div class="day prev-month">
+                    11
+                    <div class="moon-phase">🌗</div>
+                </div>
+                <div class="day prev-month">
+                    12
+                </div>
+                <div class="day prev-month">
+                    13
+                </div>
+                <div class="day saturday prev-month">
+                    14
+                </div>
+            </div>
+        </div>
+        <div class="spacer"></div>
+    </body>
+</html>
+    
